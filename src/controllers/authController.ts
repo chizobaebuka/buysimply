@@ -52,26 +52,23 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        // Create new staff member
         const newStaff = {
             id: staffsData.length + 1,
             name,
             email,
             role,
-            password // In production, hash the password before storing
+            password
         };
 
-        // Add to existing staff
+       
         staffsData.push(newStaff);
 
-        // Write back to file
         writeFileSync(
             join(__dirname, '../data/staffs.json'),
             JSON.stringify(staffsData, null, 2),
             'utf-8'
         );
 
-        // Generate token
         const token = await Promise.resolve(jwt.sign(
             { id: newStaff.id, email: newStaff.email, role: newStaff.role },
             JWT_SECRET,
@@ -117,7 +114,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         { expiresIn: '1h' }
     ));
 
-    // add to the cookies the token
     res.cookie('token', token, { maxAge: 3600000, httpOnly: true });
 
     res.json({ token });
@@ -133,7 +129,6 @@ export const getAllUsers = async (req: AuthRequest, res: Response): Promise<void
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
 
-        // Filter out sensitive information
         const sanitizedUsers = staffsData.map((user: any) => ({
             id: user.id,
             name: user.name,
@@ -168,7 +163,6 @@ export const getUserById = async (req: AuthRequest, res: Response): Promise<void
             return;
         }
 
-        // Filter out sensitive information
         const sanitizedUser = {
             id: user.id,
             name: user.name,
@@ -192,14 +186,12 @@ export const deleteUser = async (req: AuthRequest, res: Response): Promise<void>
     try {
         const { userId } = req.params;
 
-        // Check if user exists
         const userIndex = staffsData.findIndex((u: any) => u.id === parseInt(userId));
         if (userIndex === -1) {
             res.status(404).json({ message: 'User not found' });
             return;
         }
 
-        // Prevent deleting the last superAdmin
         const userToDelete = staffsData[userIndex];
         if (userToDelete.role === 'superAdmin') {
             const superAdminCount = staffsData.filter((u: any) => u.role === 'superAdmin').length;
@@ -209,10 +201,8 @@ export const deleteUser = async (req: AuthRequest, res: Response): Promise<void>
             }
         }
 
-        // Remove user from array
         staffsData.splice(userIndex, 1);
 
-        // Write back to file
         writeFileSync(STAFFS_FILE_PATH, JSON.stringify(staffsData, null, 2), 'utf-8');
 
         res.json({ message: 'User deleted successfully' });

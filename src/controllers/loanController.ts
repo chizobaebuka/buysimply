@@ -143,10 +143,8 @@ export const deleteLoan = async (req: AuthRequest, res: Response): Promise<void>
         return;
     }
 
-    // Remove the loan from the array
     loansData.splice(loanIndex, 1);
 
-    // Write the updated data back to the file
     await fs.promises.writeFile(
         join(__dirname, '../data/loans.json'),
         JSON.stringify(loansData, null, 2),
@@ -160,7 +158,6 @@ export const createLoan = async (req: AuthRequest, res: Response): Promise<void>
     try {
         const { amount, maturityDate, applicant } = req.body;
 
-        // Validate required fields
         if (!amount || !maturityDate || !applicant) {
             res.status(400).json({ message: 'Missing required fields' });
             return;
