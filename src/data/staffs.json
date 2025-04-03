@@ -14,13 +14,6 @@
     "password": "1234567Pass"
   },
   {
-    "id": 3,
-    "name": "Larry Adam",
-    "email": "ladam@example.com",
-    "role": "staff",
-    "password": "123456789Pass"
-  },
-  {
     "id": 4,
     "name": "string",
     "email": "user@example.com",

@@ -1,5 +1,26 @@
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Pagination:
+ *       type: object
+ *       properties:
+ *         total:
+ *           type: integer
+ *           description: Total number of items
+ *         currentPage:
+ *           type: integer
+ *           description: Current page number
+ *         totalPages:
+ *           type: integer
+ *           description: Total number of pages
+ *         limit:
+ *           type: integer
+ *           description: Items per page
+ */
+
+/**
+ * @swagger
  * /auth/signup:
  *   post:
  *     summary: Register a new staff member
@@ -91,4 +112,134 @@
  *         description: Logout successful
  *       401:
  *         description: Unauthorized
+ */
+
+/**
+ * @swagger
+ * /auth/users:
+ *   get:
+ *     summary: Get all users with pagination
+ *     tags: [Authentication]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 10
+ *         description: Number of items per page
+ *     responses:
+ *       200:
+ *         description: List of users retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 pagination:
+ *                   $ref: '#/components/schemas/Pagination'
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       name:
+ *                         type: string
+ *                       email:
+ *                         type: string
+ *                       role:
+ *                         type: string
+ *                         enum: [staff, admin, superAdmin]
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Requires super admin role
+ */
+
+/**
+ * @swagger
+ * /auth/users/{userId}:
+ *   get:
+ *     summary: Get user by ID
+ *     tags: [Authentication]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: User retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     role:
+ *                       type: string
+ *                       enum: [staff, admin, superAdmin]
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Requires super admin role
+ *       404:
+ *         description: User not found
+ *
+ *   delete:
+ *     summary: Delete user
+ *     tags: [Authentication]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Requires super admin role or cannot delete last super admin
+ *       404:
+ *         description: User not found
  */

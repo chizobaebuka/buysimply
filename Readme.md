@@ -63,10 +63,13 @@ All protected routes require a JWT token. To get a token:
 
 ### Available Endpoints
 
-#### Authentication
+#### Authentication & User Management
 - POST `/api/auth/signup` - Register new staff member
 - POST `/api/auth/login` - User login
 - POST `/api/auth/logout` - User logout
+- GET `/api/auth/users` - Get all users (Super Admin only)
+- GET `/api/auth/users/:userId` - Get user by ID (Super Admin only)
+- DELETE `/api/auth/users/:userId` - Delete user (Super Admin only)
 
 #### Loans
 - GET `/api/loans` - Get all loans
@@ -125,6 +128,24 @@ curl -X POST http://localhost:3000/api/loans \
       "telephone": "1234567890"
     }
   }'
+```
+
+Get all users:
+```bash
+curl -X GET http://localhost:3000/api/auth/users \
+  -H "Authorization: Bearer <your_token>"
+```
+
+Get user by ID:
+```bash
+curl -X GET http://localhost:3000/api/auth/users/1 \
+  -H "Authorization: Bearer <your_token>"
+```
+
+Delete user:
+```bash
+curl -X DELETE http://localhost:3000/api/auth/users/1 \
+  -H "Authorization: Bearer <your_token>"
 ```
 
 ## Error Handling
