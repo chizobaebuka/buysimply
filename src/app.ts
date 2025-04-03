@@ -15,7 +15,7 @@ setupGlobalMiddleware(app);
 // Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Routes with /api prefix
+// Routes 
 app.use('/api/auth', authRoutes);
 app.use('/api/loans', loanRoutes);
 
