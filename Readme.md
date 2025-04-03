@@ -30,8 +30,9 @@ npm install
 
 3. Create a `.env` file in the root directory:
 ```env
-PORT=3000
-JWT_SECRET=your_jwt_secret
+PORT= // your server port eg 5000
+JWT_SECRET= // your jwt secret
+NODE_ENV= // development or production - default development
 ```
 
 4. Build the project:
